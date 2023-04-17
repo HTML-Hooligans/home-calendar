@@ -1,9 +1,8 @@
 import express, { Application, Request, Response } from "express";
 import sequelizeConnection from "./config/config";
-const path = require("path");
-const cors = require("cors");
-const http = require("http");
-require("dotenv").config();
+import path from "path";
+import cors from "cors";
+import http from "http";
 
 const app: Application = express();
 
