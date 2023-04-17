@@ -1,4 +1,5 @@
-import express, { Application, Request, Response } from 'express';
+import express, { Application, Request, Response } from "express";
+import sequelizeConnection from "./config/config";
 const path = require("path");
 const cors = require("cors");
 const http = require("http");
@@ -24,6 +25,7 @@ const server = http.createServer(app);
 
 async function startServer() {
   try {
+    await sequelizeConnection.authenticate();
     server.listen(PORT, () => {
       console.log(`Listening on port ${PORT}...`);
     });
