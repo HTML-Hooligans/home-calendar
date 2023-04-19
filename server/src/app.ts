@@ -1,8 +1,8 @@
-import express, { Application, Request, Response } from 'express';
-const path = require("path");
-const cors = require("cors");
-const http = require("http");
-require("dotenv").config();
+import express, { Application, Request, Response } from "express";
+import sequelizeConnection from "./config/config";
+import path from "path";
+import cors from "cors";
+import http from "http";
 
 const app: Application = express();
 
@@ -24,6 +24,7 @@ const server = http.createServer(app);
 
 async function startServer() {
   try {
+    await sequelizeConnection.authenticate();
     server.listen(PORT, () => {
       console.log(`Listening on port ${PORT}...`);
     });
