@@ -1,4 +1,6 @@
-import { Dialect, Sequelize } from "sequelize";
+import { Dialect } from "sequelize";
+import { Sequelize } from "sequelize-typescript";
+import { Event } from "../models/events.model";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -12,6 +14,7 @@ const dbPassword = process.env.DB_PASSWORD;
 const sequelizeConnection = new Sequelize(dbName, dbUser, dbPassword, {
   host: dbHost,
   dialect: dbDriver,
+  models: [Event],
 });
 
 export default sequelizeConnection;

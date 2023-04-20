@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import express, { Application, Request, Response } from "express";
 import sequelizeConnection from "./config/config";
 import path from "path";
@@ -13,6 +15,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 app.get("/*", (req: Request, res: Response) => {
@@ -25,6 +28,7 @@ const server = http.createServer(app);
 async function startServer() {
   try {
     await sequelizeConnection.authenticate();
+    await sequelizeConnection.sync();
     server.listen(PORT, () => {
       console.log(`Listening on port ${PORT}...`);
     });
@@ -33,4 +37,4 @@ async function startServer() {
   }
 }
 
-startServer();
+void startServer();
