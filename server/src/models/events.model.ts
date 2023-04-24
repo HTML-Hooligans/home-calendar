@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { Model, Table, Column, DataType } from "sequelize-typescript";
 
 @Table({ tableName: "events" })
