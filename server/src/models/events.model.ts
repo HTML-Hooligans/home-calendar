@@ -14,4 +14,10 @@ export class Event extends Model {
     allowNull: false,
   })
   eventDate!: Date;
+
+  @Column({
+    type: DataType.TEXT,
+    allowNull: false,
+  })
+  description!: string;
 }
