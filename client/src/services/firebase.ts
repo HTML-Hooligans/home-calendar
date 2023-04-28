@@ -9,8 +9,10 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   getAuth,
+  signInWithPopup,
 } from 'firebase/auth';
 import { getMessaging } from 'firebase/messaging';
+import googleAuthProvider from './googleAuthProvider';
 
 type ParamsWithoutFirst<T extends (...args: any[]) => any> = Parameters<T> extends [any, ...infer R]
   ? R
@@ -39,6 +41,8 @@ export const firebase = {
     instance: auth,
 
     signOut: (...args: ParamsWithoutFirst<typeof signOut>) => signOut(auth, ...args),
+
+    signInWithPopup: () => signInWithPopup(auth, googleAuthProvider),
 
     signInWithEmailAndPassword: (...args: ParamsWithoutFirst<typeof signInWithEmailAndPassword>) =>
       signInWithEmailAndPassword(auth, ...args),
