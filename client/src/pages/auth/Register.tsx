@@ -23,11 +23,6 @@ function Register(): ReactElement {
     },
   });
 
-  const handleRegisterWithGoogle = async () => {
-    // todo add errors handler
-    await firebase.auth.signInWithPopup();
-  };
-
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
@@ -54,10 +49,6 @@ function Register(): ReactElement {
         />
         <Button color="primary" variant="contained" fullWidth type="submit">
           Submit
-        </Button>
-
-        <Button color="primary" variant="contained" fullWidth onClick={handleRegisterWithGoogle}>
-          Sign up with Google
         </Button>
       </form>
     </div>
