@@ -1,11 +1,16 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { firebase } from '../../services/firebase';
+import { useUser } from '../../hooks/useUser';
+import { useNavigate } from 'react-router-dom';
 
 function Login(): ReactElement {
+  const { isLoggedIn } = useUser();
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -27,6 +32,10 @@ function Login(): ReactElement {
     // todo add errors handler
     await firebase.auth.signInWithPopup();
   };
+
+  useEffect(() => {
+    isLoggedIn && navigate('/');
+  }, [isLoggedIn]);
 
   return (
     <div>
