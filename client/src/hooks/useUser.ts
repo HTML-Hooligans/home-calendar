@@ -16,7 +16,6 @@ export function useUser() {
   useEffect(() => {
     const unsubscribe = firebase.auth.instance.onAuthStateChanged((userAuth) => {
       if (userAuth) {
-        console.log(userAuth);
         dispatch(
           login({
             id: userAuth.uid,
