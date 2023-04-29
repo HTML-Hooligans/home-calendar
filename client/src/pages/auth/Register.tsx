@@ -1,16 +1,11 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { firebase } from '../../services/firebase';
-import { useUser } from '../../hooks/useUser';
-import { useNavigate } from 'react-router-dom';
 
-function Login(): ReactElement {
-  const { isLoggedIn } = useUser();
-  const navigate = useNavigate();
-
+function Register(): ReactElement {
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -23,19 +18,10 @@ function Login(): ReactElement {
     validateOnChange: true,
     onSubmit: async (values) => {
       // todo add errors handler
-      await firebase.auth.signInWithEmailAndPassword(values.email, values.password);
+      await firebase.auth.createUserWithEmailAndPassword(values.email, values.password);
       // todo add toast component with success message
     },
   });
-
-  const handleRegisterWithGoogle = async () => {
-    // todo add errors handler
-    await firebase.auth.signInWithPopup();
-  };
-
-  useEffect(() => {
-    isLoggedIn && navigate('/');
-  }, [isLoggedIn]);
 
   return (
     <div>
@@ -64,13 +50,9 @@ function Login(): ReactElement {
         <Button color="primary" variant="contained" fullWidth type="submit">
           Submit
         </Button>
-
-        <Button color="primary" variant="contained" fullWidth onClick={handleRegisterWithGoogle}>
-          Sign in with Google
-        </Button>
       </form>
     </div>
   );
 }
 
-export default Login;
+export default Register;
