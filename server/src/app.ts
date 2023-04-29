@@ -2,11 +2,16 @@ import "reflect-metadata";
 
 import express, { Application, Request, Response } from "express";
 import sequelizeConnection from "./config/config";
+import bodyParser from "body-parser";
 import path from "path";
 import cors from "cors";
 import http from "http";
+import api from "./routes/api";
 
 const app: Application = express();
+
+app.use(bodyParser.json());
+app.use(express.json());
 
 app.use(
   cors({
@@ -14,7 +19,8 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use("/v1", api);
+
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 app.get("/*", (req: Request, res: Response) => {
