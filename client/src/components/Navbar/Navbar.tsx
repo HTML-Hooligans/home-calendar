@@ -10,6 +10,8 @@ import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import * as styles from './Navbar.styles';
 import CustomDrawer from './Drawer';
+import { useUser } from '../../hooks/useUser';
+import { firebase } from '../../services/firebase';
 
 interface Props {
   window?: () => Window;
@@ -17,7 +19,9 @@ interface Props {
 
 export default function Navbar({ window }: Props) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { isLoggedIn } = useUser();
   const navigate = useNavigate();
+
   const container = window !== undefined ? () => window().document.body : undefined;
 
   const navItems = [
@@ -33,6 +37,11 @@ export default function Navbar({ window }: Props) {
 
   const handleDrawerToggle = () => {
     setIsMobileOpen((prevState) => !prevState);
+  };
+
+  const handleLogout = async () => {
+    await firebase.auth.signOut();
+    // todo handle logout action?
   };
 
   return (
@@ -55,17 +64,25 @@ export default function Navbar({ window }: Props) {
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
             {/*// todo add logo*/}
-            <div css={styles.logoWrapper} onClick={() => navigate('/')}>
+            <span css={styles.logoWrapper} onClick={() => navigate('/')}>
               LOGO
-            </div>
+            </span>
           </Typography>
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-            {navItems.map(({ name, callback }) => (
-              <Button key={name} sx={{ color: '#fff' }} onClick={callback}>
-                {name}
+          {!isLoggedIn ? (
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              {navItems.map(({ name, callback }) => (
+                <Button key={name} sx={{ color: '#fff' }} onClick={callback}>
+                  {name}
+                </Button>
+              ))}
+            </Box>
+          ) : (
+            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+              <Button sx={{ color: '#fff' }} onClick={() => handleLogout()}>
+                Logout
               </Button>
-            ))}
-          </Box>
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
       <Box component="nav">
