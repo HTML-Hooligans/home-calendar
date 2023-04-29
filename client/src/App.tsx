@@ -6,18 +6,22 @@ import './App.css';
 import Login from './pages/auth/Login';
 import NotFound from './pages/404/NotFound';
 import Register from './pages/auth/Register';
+import { store } from './store/store';
+import { Provider } from 'react-redux';
 
 function App() {
   return (
     <>
       <Router>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/sign-up" element={<Register />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <Provider store={store}>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/sign-up" element={<Register />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Provider>
       </Router>
     </>
   );
