@@ -64,9 +64,9 @@ export default function Navbar({ window }: Props) {
             sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
           >
             {/*// todo add logo*/}
-            <div css={styles.logoWrapper} onClick={() => navigate('/')}>
+            <span css={styles.logoWrapper} onClick={() => navigate('/')}>
               LOGO
-            </div>
+            </span>
           </Typography>
           {!isLoggedIn ? (
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
