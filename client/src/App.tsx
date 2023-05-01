@@ -8,10 +8,24 @@ import NotFound from './pages/404/NotFound';
 import Register from './pages/auth/Register';
 import { store } from './store/store';
 import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
     <>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <Router>
         <Provider store={store}>
           <Navbar />

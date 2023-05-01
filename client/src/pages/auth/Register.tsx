@@ -4,8 +4,13 @@ import * as Yup from 'yup';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { firebase } from '../../services/firebase';
+import { useNavigate } from 'react-router-dom';
+import { showToast } from '../../utils/showToast';
+import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
 
 function Register(): ReactElement {
+  const navigate = useNavigate();
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -17,9 +22,13 @@ function Register(): ReactElement {
     }),
     validateOnChange: true,
     onSubmit: async (values) => {
-      // todo add errors handler
-      await firebase.auth.createUserWithEmailAndPassword(values.email, values.password);
-      // todo add toast component with success message
+      try {
+        // todo add spinner logic with button loader
+        await firebase.auth.createUserWithEmailAndPassword(values.email, values.password);
+        navigate('/');
+      } catch (e) {
+        showToast('error', getAuthErrorMessage(e));
+      }
     },
   });
 
