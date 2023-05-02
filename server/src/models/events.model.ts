@@ -1,9 +1,9 @@
-import "reflect-metadata";
+import 'reflect-metadata';
 import { Model, Table, Column, DataType, Index } from 'sequelize-typescript';
 
 @Table({
   timestamps: false,
-  tableName: "events"
+  tableName: 'events',
 })
 export class Event extends Model {
   @Index
