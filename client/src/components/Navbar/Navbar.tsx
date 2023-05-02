@@ -11,7 +11,6 @@ import { useNavigate } from 'react-router-dom';
 import * as styles from './Navbar.styles';
 import CustomDrawer from './Drawer';
 import { useUser } from '../../hooks/useUser';
-import { firebase } from '../../services/firebase';
 
 interface Props {
   window?: () => Window;
@@ -19,7 +18,7 @@ interface Props {
 
 export default function Navbar({ window }: Props) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const { isLoggedIn } = useUser();
+  const { isLoggedIn, logOutUser } = useUser();
   const navigate = useNavigate();
 
   const container = window !== undefined ? () => window().document.body : undefined;
@@ -37,11 +36,6 @@ export default function Navbar({ window }: Props) {
 
   const handleDrawerToggle = () => {
     setIsMobileOpen((prevState) => !prevState);
-  };
-
-  const handleLogout = async () => {
-    await firebase.auth.signOut();
-    // todo handle logout action?
   };
 
   return (
@@ -78,7 +72,7 @@ export default function Navbar({ window }: Props) {
             </Box>
           ) : (
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-              <Button sx={{ color: '#fff' }} onClick={() => handleLogout()}>
+              <Button sx={{ color: '#fff' }} onClick={() => logOutUser()}>
                 Logout
               </Button>
             </Box>

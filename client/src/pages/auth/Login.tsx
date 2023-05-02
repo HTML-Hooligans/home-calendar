@@ -6,6 +6,8 @@ import TextField from '@mui/material/TextField';
 import { firebase } from '../../services/firebase';
 import { useUser } from '../../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
+import { showToast } from '../../utils/showToast';
+import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
 
 function Login(): ReactElement {
   const { isLoggedIn } = useUser();
@@ -22,15 +24,21 @@ function Login(): ReactElement {
     }),
     validateOnChange: true,
     onSubmit: async (values) => {
-      // todo add errors handler
-      await firebase.auth.signInWithEmailAndPassword(values.email, values.password);
-      // todo add toast component with success message
+      try {
+        // todo add spinner logic with button loader
+        await firebase.auth.signInWithEmailAndPassword(values.email, values.password);
+      } catch (e) {
+        showToast('error', getAuthErrorMessage(e));
+      }
     },
   });
 
   const handleRegisterWithGoogle = async () => {
-    // todo add errors handler
-    await firebase.auth.signInWithPopup();
+    try {
+      await firebase.auth.signInWithPopup();
+    } catch (e) {
+      showToast('error', getAuthErrorMessage(e));
+    }
   };
 
   useEffect(() => {
