@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { Event } from "../models/events.model";
+import { Request, Response } from 'express';
+import { Event } from '../models/events.model';
 
 export const httpGetAllEvents = async (req: Request, res: Response) => {
   try {
@@ -8,7 +8,7 @@ export const httpGetAllEvents = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: "Internal Server Error"
+      message: 'Internal Server Error',
     });
   }
 };
@@ -27,7 +27,7 @@ export const httpAddNewEvent = async (req: Request, res: Response) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({
-      message: "Internal Server Error",
+      message: 'Internal Server Error',
     });
   }
 };

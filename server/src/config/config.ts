@@ -1,7 +1,7 @@
-import { Dialect } from "sequelize";
-import { Sequelize } from "sequelize-typescript";
-import { Event } from "../models/events.model";
-import dotenv from "dotenv";
+import { Dialect } from 'sequelize';
+import { Sequelize } from 'sequelize-typescript';
+import { Event } from '../models/events.model';
+import dotenv from 'dotenv';
 
 dotenv.config();
 

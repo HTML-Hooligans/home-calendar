@@ -3,8 +3,8 @@ import { httpAddNewEvent, httpGetAllEvents } from '../controllers/events.control
 
 const eventsRouter = express.Router();
 
-eventsRouter.get("/", httpGetAllEvents);
+eventsRouter.get('/', httpGetAllEvents);
 
-eventsRouter.post("/", httpAddNewEvent);
+eventsRouter.post('/', httpAddNewEvent);
 
 export default eventsRouter;
