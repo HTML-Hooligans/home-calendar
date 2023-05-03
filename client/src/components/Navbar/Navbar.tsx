@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import * as styles from './Navbar.styles';
 import CustomDrawer from './Drawer';
 import { useUser } from '../../hooks/useUser';
+import BasicModal from '../Modal/Modal';
+import { showToast } from '../../utils/showToast';
 
 interface Props {
   window?: () => Window;
@@ -18,6 +20,7 @@ interface Props {
 
 export default function Navbar({ window }: Props) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const { isLoggedIn, logOutUser } = useUser();
   const navigate = useNavigate();
 
@@ -72,11 +75,38 @@ export default function Navbar({ window }: Props) {
             </Box>
           ) : (
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-              <Button sx={{ color: '#fff' }} onClick={() => logOutUser()}>
+              <Button
+                sx={{ color: '#fff' }}
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
                 Logout
               </Button>
             </Box>
           )}
+          <BasicModal open={open} title={'Are you sure?'}>
+            <Button
+              sx={{ mx: 2 }}
+              variant="contained"
+              onClick={() => {
+                logOutUser();
+                setOpen(false);
+                showToast('success', 'You have successfully logged out!');
+              }}
+            >
+              YES
+            </Button>
+            <Button
+              sx={{ mx: 2 }}
+              variant="contained"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              NO
+            </Button>
+          </BasicModal>
         </Toolbar>
       </AppBar>
       <Box component="nav">
