@@ -21,12 +21,12 @@ interface Props extends ButtonProps {
 
 const Button: FC<Props> = ({
   fullWidth,
-  color,
+  color = 'primary',
   loading,
   onClick,
   children,
   disabled,
-  variant,
+  variant = 'contained',
   size = 'large',
   ...restProps
 }) => {
@@ -34,12 +34,12 @@ const Button: FC<Props> = ({
 
   return (
     <MaterialButton
-      color={color || 'primary'}
+      color={color}
       disabled={disabled || loading}
       fullWidth={fullWidth}
       onClick={onClick}
-      variant={variant || 'contained'}
-      size={size || 'large'}
+      variant={variant}
+      size={size}
       {...restProps}
     >
       {loading ? (
