@@ -2,17 +2,14 @@ import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { login, logout, selectIsLoggedIn, selectUser } from '../features/user/userSlice';
 import { firebase } from '../services/firebase';
-import { useNavigate } from 'react-router-dom';
 
 export function useUser() {
   const user = useAppSelector(selectUser);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
-  const logOutUser = async () => {
-    await firebase.auth.instance.signOut();
-    navigate('/');
+  const logOutUser = () => {
+    firebase.auth.instance.signOut();
   };
 
   useEffect(() => {

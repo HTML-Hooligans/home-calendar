@@ -1,13 +1,8 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
+import MaterialModal from '@mui/material/Modal';
+import { ModalProps } from '@mui/material/Modal';
 import { FC } from 'react';
-
-interface ModalProps {
-  children?: JSX.Element | JSX.Element[];
-  open: boolean;
-  title: string;
-}
 
 const style = {
   position: 'absolute',
@@ -25,9 +20,9 @@ const style = {
   p: 4,
 };
 
-const BasicModal: FC<ModalProps> = ({ children, open, title }) => {
+const Modal: FC<ModalProps> = ({ children, open, title }) => {
   return (
-    <Modal open={open}>
+    <MaterialModal open={open}>
       <Box sx={style}>
         <Typography id="modal-modal-title" align="center" variant="h6" component="h2">
           {title}
@@ -36,8 +31,8 @@ const BasicModal: FC<ModalProps> = ({ children, open, title }) => {
           {children}
         </Box>
       </Box>
-    </Modal>
+    </MaterialModal>
   );
 };
 
-export default BasicModal;
+export default Modal;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import * as styles from './Navbar.styles';
 import CustomDrawer from './Drawer';
 import { useUser } from '../../hooks/useUser';
-import BasicModal from '../Modal/Modal';
+import Modal from '../../UI/Modal/Modal';
 import { showToast } from '../../utils/showToast';
 
 interface Props {
@@ -20,7 +20,7 @@ interface Props {
 
 export default function Navbar({ window }: Props) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { isLoggedIn, logOutUser } = useUser();
   const navigate = useNavigate();
 
@@ -36,6 +36,17 @@ export default function Navbar({ window }: Props) {
       callback: () => navigate('/auth/login'),
     },
   ];
+
+  const logoutAction = async () => {
+    try {
+      await logOutUser();
+      setIsModalOpen(false);
+      navigate('/');
+      showToast('success', 'You have successfully logged out!');
+    } catch (e) {
+      showToast('error', 'The logout process failed');
+    }
+  };
 
   const handleDrawerToggle = () => {
     setIsMobileOpen((prevState) => !prevState);
@@ -78,35 +89,29 @@ export default function Navbar({ window }: Props) {
               <Button
                 sx={{ color: '#fff' }}
                 onClick={() => {
-                  setOpen(true);
+                  setIsModalOpen(true);
                 }}
               >
                 Logout
               </Button>
             </Box>
           )}
-          <BasicModal open={open} title={'Are you sure?'}>
-            <Button
-              sx={{ mx: 2 }}
-              variant="contained"
-              onClick={() => {
-                logOutUser();
-                setOpen(false);
-                showToast('success', 'You have successfully logged out!');
-              }}
-            >
-              YES
-            </Button>
-            <Button
-              sx={{ mx: 2 }}
-              variant="contained"
-              onClick={() => {
-                setOpen(false);
-              }}
-            >
-              NO
-            </Button>
-          </BasicModal>
+          <Modal open={isModalOpen} title={'Are you really want to log out?'}>
+            <Fragment>
+              <Button sx={{ mx: 2 }} variant="contained" onClick={logoutAction}>
+                YES
+              </Button>
+              <Button
+                sx={{ mx: 2 }}
+                variant="contained"
+                onClick={() => {
+                  setIsModalOpen(false);
+                }}
+              >
+                NO
+              </Button>
+            </Fragment>
+          </Modal>
         </Toolbar>
       </AppBar>
       <Box component="nav">
