@@ -1,17 +1,18 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { firebase } from '../../services/firebase';
 import { useUser } from '../../hooks/useUser';
 import { useNavigate } from 'react-router-dom';
 import { showToast } from '../../utils/showToast';
 import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
+import Button from '../../ui/Button/Button';
 
 function Login(): ReactElement {
   const { isLoggedIn } = useUser();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -25,10 +26,12 @@ function Login(): ReactElement {
     validateOnChange: true,
     onSubmit: async (values) => {
       try {
-        // todo add spinner logic with button loader
+        setIsLoading(true);
         await firebase.auth.signInWithEmailAndPassword(values.email, values.password);
       } catch (e) {
         showToast('error', getAuthErrorMessage(e));
+      } finally {
+        setIsLoading(false);
       }
     },
   });
@@ -69,11 +72,12 @@ function Login(): ReactElement {
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
         />
-        <Button color="primary" variant="contained" fullWidth type="submit">
+
+        <Button fullWidth type="submit" loading={isLoading}>
           Submit
         </Button>
 
-        <Button color="primary" variant="contained" fullWidth onClick={handleRegisterWithGoogle}>
+        <Button fullWidth onClick={handleRegisterWithGoogle}>
           Sign in with Google
         </Button>
       </form>
