@@ -37,10 +37,10 @@ export default function Navbar({ window }: Props) {
     },
   ];
 
-  const logoutAction = async () => {
+  const handleLogout = async () => {
     try {
-      await logOutUser();
       setIsModalOpen(false);
+      await logOutUser();
       navigate('/');
       showToast('success', 'You have successfully logged out!');
     } catch (e) {
@@ -98,7 +98,7 @@ export default function Navbar({ window }: Props) {
           )}
           <Modal open={isModalOpen} title={'Are you really want to log out?'}>
             <Fragment>
-              <Button sx={{ mx: 2 }} variant="contained" onClick={logoutAction}>
+              <Button sx={{ mx: 2 }} variant="contained" onClick={handleLogout}>
                 YES
               </Button>
               <Button

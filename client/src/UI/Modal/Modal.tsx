@@ -25,9 +25,9 @@ const style = {
   p: 4,
 };
 
-const Modal: FC<Props> = ({ children, open, title }) => {
+const Modal: FC<Props> = ({ children, open, title, ...restProps }) => {
   return (
-    <MaterialModal open={open}>
+    <MaterialModal open={open} {...restProps}>
       <Box sx={style}>
         <Typography id="modal-modal-title" align="center" variant="h6" component="h2">
           {title}
