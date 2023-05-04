@@ -33,6 +33,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/sign-up" element={<Register />} />
+
+            <Route path="/dashboard" element={<div>Dashboard</div>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Provider>

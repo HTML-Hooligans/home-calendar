@@ -1,15 +1,16 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { firebase } from '../../services/firebase';
 import { useNavigate } from 'react-router-dom';
 import { showToast } from '../../utils/showToast';
 import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
+import Button from '../../ui/Button/Button';
 
 function Register(): ReactElement {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -23,11 +24,13 @@ function Register(): ReactElement {
     validateOnChange: true,
     onSubmit: async (values) => {
       try {
-        // todo add spinner logic with button loader
+        setIsLoading(true);
         await firebase.auth.createUserWithEmailAndPassword(values.email, values.password);
         navigate('/');
       } catch (e) {
         showToast('error', getAuthErrorMessage(e));
+      } finally {
+        setIsLoading(false);
       }
     },
   });
@@ -56,7 +59,8 @@ function Register(): ReactElement {
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
         />
-        <Button color="primary" variant="contained" fullWidth type="submit">
+
+        <Button fullWidth type="submit" loading={isLoading}>
           Submit
         </Button>
       </form>
