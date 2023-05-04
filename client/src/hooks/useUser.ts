@@ -13,9 +13,8 @@ export function useUser() {
   // todo: edit protected routes
   const protectedRoutes = ['/dashboard'];
 
-  const logOutUser = async () => {
-    await firebase.auth.instance.signOut();
-    navigate('/');
+  const logOutUser = () => {
+    firebase.auth.instance.signOut();
   };
 
   useEffect(() => {

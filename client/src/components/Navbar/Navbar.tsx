@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 import * as styles from './Navbar.styles';
 import CustomDrawer from './Drawer';
 import { useUser } from '../../hooks/useUser';
+import Modal from '../../UI/Modal/Modal';
+import { showToast } from '../../utils/showToast';
 
 interface Props {
   window?: () => Window;
@@ -18,6 +20,7 @@ interface Props {
 
 export default function Navbar({ window }: Props) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { isLoggedIn, logOutUser } = useUser();
   const navigate = useNavigate();
 
@@ -33,6 +36,17 @@ export default function Navbar({ window }: Props) {
       callback: () => navigate('/auth/login'),
     },
   ];
+
+  const handleLogout = async () => {
+    try {
+      setIsModalOpen(false);
+      await logOutUser();
+      navigate('/');
+      showToast('success', 'You have successfully logged out!');
+    } catch (e) {
+      showToast('error', 'The logout process failed');
+    }
+  };
 
   const handleDrawerToggle = () => {
     setIsMobileOpen((prevState) => !prevState);
@@ -72,11 +86,32 @@ export default function Navbar({ window }: Props) {
             </Box>
           ) : (
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-              <Button sx={{ color: '#fff' }} onClick={() => logOutUser()}>
+              <Button
+                sx={{ color: '#fff' }}
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
+              >
                 Logout
               </Button>
             </Box>
           )}
+          <Modal open={isModalOpen} title={'Are you really want to log out?'}>
+            <Fragment>
+              <Button sx={{ mx: 2 }} variant="contained" onClick={handleLogout}>
+                YES
+              </Button>
+              <Button
+                sx={{ mx: 2 }}
+                variant="contained"
+                onClick={() => {
+                  setIsModalOpen(false);
+                }}
+              >
+                NO
+              </Button>
+            </Fragment>
+          </Modal>
         </Toolbar>
       </AppBar>
       <Box component="nav">
