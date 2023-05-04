@@ -1,8 +1,13 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import MaterialModal from '@mui/material/Modal';
-import { ModalProps } from '@mui/material/Modal';
-import { FC } from 'react';
+import MaterialModal, { ModalProps } from '@mui/material/Modal';
+import { FC, ReactElement } from 'react';
+
+interface Props extends ModalProps {
+  children: ReactElement;
+  open: boolean;
+  title: string | undefined;
+}
 
 const style = {
   position: 'absolute',
@@ -20,7 +25,7 @@ const style = {
   p: 4,
 };
 
-const Modal: FC<ModalProps> = ({ children, open, title }) => {
+const Modal: FC<Props> = ({ children, open, title }) => {
   return (
     <MaterialModal open={open}>
       <Box sx={style}>
