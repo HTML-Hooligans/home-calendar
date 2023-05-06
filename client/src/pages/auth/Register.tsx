@@ -6,7 +6,7 @@ import { firebase } from '../../services/firebase';
 import { useNavigate } from 'react-router-dom';
 import { showToast } from '../../utils/showToast';
 import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
-import Button from '../../ui2/Button/Button';
+import Button from '../../ui/Button/Button';
 
 function Register(): ReactElement {
   const navigate = useNavigate();
