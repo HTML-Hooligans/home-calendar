@@ -1,40 +1,30 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getAnalytics, logEvent } from 'firebase/analytics';
-// TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 import {
   signOut,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  updateProfile,
   getAuth,
   signInWithPopup,
 } from 'firebase/auth';
-import { getMessaging } from 'firebase/messaging';
 import googleAuthProvider from './googleAuthProvider';
 
 type ParamsWithoutFirst<T extends (...args: any[]) => any> = Parameters<T> extends [any, ...infer R]
   ? R
   : never;
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: 'AIzaSyBkJ6pXGeO7HkedG5Sy59QLWstZ_zTyhc4',
-  authDomain: 'home-calendar-5bc63.firebaseapp.com',
-  projectId: 'home-calendar-5bc63',
-  storageBucket: 'home-calendar-5bc63.appspot.com',
-  messagingSenderId: '779208631995',
-  appId: '1:779208631995:web:216a2388d9407ddf5b6b9e',
-  measurementId: 'G-NDE86ZCVDH',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const auth = getAuth(app);
-const messaging = getMessaging(app);
 
 export const firebase = {
   auth: {
@@ -50,15 +40,5 @@ export const firebase = {
     createUserWithEmailAndPassword: (
       ...args: ParamsWithoutFirst<typeof createUserWithEmailAndPassword>
     ) => createUserWithEmailAndPassword(auth, ...args),
-
-    updateProfile: (...args: Parameters<typeof updateProfile>) => updateProfile(...args),
-  },
-  analytics: {
-    instance: analytics,
-    logEvent: (...args: ParamsWithoutFirst<typeof logEvent>) =>
-      Promise.resolve(logEvent(analytics, ...args)),
-  },
-  messaging: {
-    instance: messaging,
   },
 };

@@ -14,7 +14,7 @@ export function useUser() {
   const protectedRoutes = ['/dashboard'];
 
   const logOutUser = () => {
-    firebase.auth.instance.signOut();
+    firebase.auth.signOut();
   };
 
   useEffect(() => {

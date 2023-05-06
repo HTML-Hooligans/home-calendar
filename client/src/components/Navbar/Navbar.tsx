@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import * as styles from './Navbar.styles';
 import CustomDrawer from './Drawer';
 import { useUser } from '../../hooks/useUser';
-import Modal from '../../UI/Modal/Modal';
+import Modal from '../../ui2/Modal/Modal';
 import { showToast } from '../../utils/showToast';
 
 interface Props {
