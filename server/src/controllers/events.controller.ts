@@ -31,3 +31,54 @@ export const httpAddNewEvent = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const httpUpdateEvent = async (req: Request, res: Response) => {
+  try {
+    const { eventName, eventDate, description } = req.body;
+    const { id } = req.params;
+
+    const event = await Event.findByPk(id);
+    if (!event) {
+      return res.status(404).json({
+        message: 'Event not found',
+      });
+    }
+
+    event.eventName = eventName;
+    event.eventDate = eventDate;
+    event.description = description;
+
+    await event.save();
+
+    res.status(200).json(event);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Internal Server Error',
+    });
+  }
+};
+
+export const httpDeleteEvent = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+
+    const event = await Event.findByPk(id);
+    if (!event) {
+      return res.status(404).json({
+        message: 'Event not found',
+      });
+    }
+
+    await event.destroy();
+
+    res.status(200).json({
+      message: 'Event deleted successfully',
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: 'Internal Server Error',
+    });
+  }
+};
