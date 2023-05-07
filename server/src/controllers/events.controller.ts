@@ -2,8 +2,6 @@ import { Request, Response } from 'express';
 import { Event } from '../models/events.model';
 
 export const httpGetAllEvents = async (req: Request, res: Response) => {
-  console.log(req.headers);
-
   try {
     const response = await Event.findAll();
     res.status(200).json(response);

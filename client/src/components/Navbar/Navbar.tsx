@@ -85,16 +85,28 @@ export default function Navbar({ window }: Props) {
               ))}
             </Box>
           ) : (
-            <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-              <Button
-                sx={{ color: '#fff' }}
-                onClick={() => {
-                  setIsModalOpen(true);
-                }}
-              >
-                Logout
-              </Button>
-            </Box>
+            <>
+              <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <Button
+                  sx={{ color: '#fff' }}
+                  onClick={() => {
+                    navigate('/dashboard');
+                  }}
+                >
+                  Dashboard
+                </Button>
+              </Box>
+              <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                <Button
+                  sx={{ color: '#fff' }}
+                  onClick={() => {
+                    setIsModalOpen(true);
+                  }}
+                >
+                  Logout
+                </Button>
+              </Box>
+            </>
           )}
           <Modal open={isModalOpen} title={'Are you really want to log out?'}>
             <Fragment>

@@ -40,7 +40,7 @@ export function useUser() {
 
   useEffect(() => {
     if (protectedRoutes.includes(pathname) && isLoggedIn === false) {
-      navigate('/auth/sign-up');
+      navigate('/auth/login');
     }
   }, [isLoggedIn, navigate, pathname]);
 
