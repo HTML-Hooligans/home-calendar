@@ -10,6 +10,8 @@ import { store } from './store/store';
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Dashboard from './pages/dashboard/Dashboard';
+// import 'react-calendar/dist/Calendar.css';
 
 function App() {
   return (
@@ -34,7 +36,7 @@ function App() {
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/sign-up" element={<Register />} />
 
-            <Route path="/dashboard" element={<div>Dashboard</div>} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Provider>
