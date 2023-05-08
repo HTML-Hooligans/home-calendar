@@ -5,7 +5,7 @@ import { useUser } from '../../hooks/useUser';
 
 interface NewEvent {
   eventName: string;
-  eventDate: string | Date;
+  eventDate: string;
   description: string;
 }
 
@@ -28,7 +28,6 @@ const NewEventForm = () => {
 
   const handleSubmit = (values: NewEvent, { resetForm }: { resetForm: () => void }) => {
     const newEvent = { ...values, userID: userID };
-    newEvent.eventDate = '2023-05-01';
     useAddEvent(newEvent);
     resetForm();
   };
