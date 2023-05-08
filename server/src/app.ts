@@ -1,11 +1,11 @@
 import 'reflect-metadata';
-
 import express, { Application, Request, Response } from 'express';
 import sequelizeConnection from './config/config';
 import path from 'path';
 import cors from 'cors';
 import http from 'http';
 import api from './routes/api';
+import middlewares from './middlewares';
 
 const app: Application = express();
 
@@ -16,6 +16,8 @@ app.use(
     origin: 'http://localhost:3000',
   })
 );
+
+app.use(middlewares.decodeToken);
 
 app.use('/v1', api);
 

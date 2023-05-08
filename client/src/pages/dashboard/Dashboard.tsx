@@ -1,35 +1,20 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import { formatDate, isSameDay } from '../../utils/calendarUtils';
+import eventsApi from '../../api/eventsApi';
+import { Event } from '../../types/events';
 
 interface CalendarViewMappingProps {
   date: Date;
   view: string;
 }
 
-interface Event {
-  description: string;
-  eventDate: string;
-  eventName: string;
-  id: number;
-  userID: number;
-}
-
 export default function Dashboard(): ReactElement {
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    // todo add axios or react query + move fetch logic to services
-    // todo think about storing data in redux or component?
-    async function fetchEvents() {
-      const response = await fetch('http://localhost:3001/v1/events');
-      const events = await response.json();
-      console.log(events);
-      setEvents(events);
-    }
-
     if (events.length === 0) {
-      fetchEvents();
+      eventsApi.fetchEvents().then((response) => setEvents(response));
     }
   }, []);
 
@@ -44,10 +29,11 @@ export default function Dashboard(): ReactElement {
     }
   };
 
-  const handleDayClick = (value: Date) => {
-    const event = events.find((event) => formatDate(event.eventDate) === formatDate(value));
+  const handleDayClick = (day: Date) => {
+    const event = events.find((event) => formatDate(event.eventDate) === formatDate(day));
 
     if (event) {
+      // todo add modal with event form
       console.log(event);
     }
   };

@@ -27,6 +27,9 @@ export function useUser() {
             email: userAuth.email,
           })
         );
+        userAuth.getIdToken().then((token) => {
+          window.localStorage.setItem('token', token);
+        });
       } else {
         dispatch(logout());
       }
