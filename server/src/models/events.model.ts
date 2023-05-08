@@ -11,7 +11,7 @@ export class Event extends Model {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  userID!: number;
+  userID!: string;
 
   @Column({
     type: DataType.STRING,
