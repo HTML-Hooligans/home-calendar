@@ -8,7 +8,7 @@ import { Model, Table, Column, DataType, Index } from 'sequelize-typescript';
 export class Event extends Model {
   @Index
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
     allowNull: false,
   })
   userID!: string;
