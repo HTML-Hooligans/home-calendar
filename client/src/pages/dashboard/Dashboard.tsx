@@ -3,6 +3,7 @@ import Calendar from 'react-calendar';
 import { formatDate, isSameDay } from '../../utils/calendarUtils';
 import eventsApi from '../../api/eventsApi';
 import { Event } from '../../types/events';
+import EventForm from '../../components/EventForm/EventForm';
 
 interface CalendarViewMappingProps {
   date: Date;
@@ -46,6 +47,7 @@ export default function Dashboard(): ReactElement {
         tileContent={mapEventsToCalendarView}
         onClickDay={(value) => handleDayClick(value)}
       />
+      <EventForm />
     </div>
   );
 }
