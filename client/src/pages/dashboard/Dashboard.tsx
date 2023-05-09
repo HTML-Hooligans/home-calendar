@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import { formatDate, isSameDay } from '../../utils/calendarUtils';
 import eventsApi from '../../api/eventsApi';
 import { Event } from '../../types/events';
-import EventForm from '../../components/EventForm/EventForm';
+import EventForm from '../../components/Forms/EventForm';
 import { useUser } from '../../hooks/useUser';
 
 interface CalendarViewMappingProps {

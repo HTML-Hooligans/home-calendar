@@ -3,7 +3,9 @@ export interface Event {
   eventDate: string;
   eventName: string;
   id: number;
-  userID: string;
+  userID: string | undefined;
 }
 
 export type GetEventsResponse = Event[];
+
+export type NewEvent = Omit<Event, 'id'>;
