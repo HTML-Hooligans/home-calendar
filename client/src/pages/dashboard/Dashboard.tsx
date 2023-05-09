@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import { formatDate, isSameDay } from '../../utils/calendarUtils';
 import eventsApi from '../../api/eventsApi';
-import { EventResponse } from '../../types/events';
+import { Event } from '../../types/events';
 import { useUser } from '../../hooks/useUser';
 
 interface CalendarViewMappingProps {
@@ -11,7 +11,7 @@ interface CalendarViewMappingProps {
 }
 
 export default function Dashboard(): ReactElement {
-  const [events, setEvents] = useState<EventResponse[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const { userId } = useUser();
 
   useEffect(() => {
