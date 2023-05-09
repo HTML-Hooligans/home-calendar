@@ -1,7 +1,7 @@
-export interface Event {
+export interface EventResponse {
   description: string;
   eventDate: string;
   eventName: string;
   id: number;
-  userID: number;
+  userID: string;
 }

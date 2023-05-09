@@ -2,7 +2,8 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import { formatDate, isSameDay } from '../../utils/calendarUtils';
 import eventsApi from '../../api/eventsApi';
-import { Event } from '../../types/events';
+import { EventResponse } from '../../types/events';
+import { useUser } from '../../hooks/useUser';
 
 interface CalendarViewMappingProps {
   date: Date;
@@ -10,16 +11,17 @@ interface CalendarViewMappingProps {
 }
 
 export default function Dashboard(): ReactElement {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<EventResponse[]>([]);
+  const { userId } = useUser();
 
   useEffect(() => {
-    if (events.length === 0) {
-      eventsApi.fetchEvents().then((response) => setEvents(response));
+    if (events.length === 0 && userId) {
+      eventsApi.fetchEvents(userId).then((response) => setEvents(response));
     }
-  }, []);
+  }, [userId]);
 
   const mapEventsToCalendarView = ({ date, view }: CalendarViewMappingProps) => {
-    if (view === 'month') {
+    if (view === 'month' && events.length > 0) {
       if (events.find((calendarEvent) => isSameDay(calendarEvent.eventDate, date))) {
         // todo add some icon or text?
         return <p>Event</p>;

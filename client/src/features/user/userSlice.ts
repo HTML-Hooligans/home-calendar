@@ -41,5 +41,6 @@ export const { login, logout } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user.user;
 export const selectIsLoggedIn = (state: RootState) => state.user.isLoggedIn;
+export const selectUserId = (state: RootState) => state.user.user?.id;
 
 export default userSlice.reducer;
