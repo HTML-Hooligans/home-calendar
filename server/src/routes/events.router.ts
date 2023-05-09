@@ -8,12 +8,9 @@ import {
 
 const eventsRouter = express.Router();
 
-eventsRouter.get('/', httpGetAllEvents);
-
+eventsRouter.get('/:id', httpGetAllEvents);
 eventsRouter.post('/', httpAddNewEvent);
-
 eventsRouter.put('/:id', httpUpdateEvent);
-
 eventsRouter.delete('/:id', httpDeleteEvent);
 
 export default eventsRouter;
