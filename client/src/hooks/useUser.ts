@@ -1,12 +1,20 @@
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { login, logout, selectIsLoggedIn, selectUser } from '../features/user/userSlice';
+import {
+  login,
+  logout,
+  selectIsLoggedIn,
+  selectUser,
+  selectUserId,
+} from '../features/user/userSlice';
 import { firebase } from '../services/firebase';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 export function useUser() {
   const user = useAppSelector(selectUser);
   const isLoggedIn = useAppSelector(selectIsLoggedIn);
+  const userId = useAppSelector(selectUserId);
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -48,5 +56,6 @@ export function useUser() {
     isLoggedIn,
     user,
     logOutUser,
+    userId,
   };
 }

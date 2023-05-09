@@ -3,5 +3,7 @@ export interface Event {
   eventDate: string;
   eventName: string;
   id: number;
-  userID: number;
+  userID: string;
 }
+
+export type GetEventsResponse = Event[];
