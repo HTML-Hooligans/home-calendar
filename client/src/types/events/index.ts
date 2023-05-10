@@ -3,7 +3,7 @@ export interface Event {
   eventDate: string;
   eventName: string;
   id: number;
-  userID: string | undefined;
+  userID: string;
 }
 
 export type GetEventsResponse = Event[];

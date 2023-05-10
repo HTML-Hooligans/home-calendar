@@ -31,10 +31,10 @@ const NewEventForm = () => {
         .max(maxDate, 'Event is too far in the future'),
     }),
     validateOnChange: true,
-    onSubmit: async (values: NewEvent) => {
+    onSubmit: async (values) => {
       try {
         setIsLoading(true);
-        await eventsApi.addEvent({ ...values, userID: userId });
+        await eventsApi.addEvent({ ...values, userID: userId } as NewEvent);
       } catch (e) {
         showToast('error', getAuthErrorMessage(e));
       } finally {
