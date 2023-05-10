@@ -7,6 +7,7 @@ import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
 import TextField from '@mui/material/TextField';
 import Button from '../../ui/Button/Button';
 import eventsApi from '../../api/eventsApi';
+import { NewEvent } from '../../types/events';
 
 const NewEventForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -19,17 +20,18 @@ const NewEventForm = () => {
       eventName: '',
       description: '',
       eventDate: '',
+      userID: '',
     },
     validationSchema: Yup.object().shape({
       eventName: Yup.string().required('Name is required').max(30, 'Name is too long'),
-      description: Yup.string().required('Description is required'),
+      description: Yup.string(),
       eventDate: Yup.date()
         .required('Deadline is required')
-        .min(new Date(), 'Deadline must be in the future')
-        .max(maxDate, 'Deadline is too far in the future'),
+        .min(new Date(), 'Event cannot be planned for the past.')
+        .max(maxDate, 'Event is too far in the future'),
     }),
     validateOnChange: true,
-    onSubmit: async (values) => {
+    onSubmit: async (values: NewEvent) => {
       try {
         setIsLoading(true);
         await eventsApi.addEvent({ ...values, userID: userId });
@@ -42,16 +44,7 @@ const NewEventForm = () => {
   });
 
   return (
-    <div
-      style={{
-        width: '50%',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      }}
-    >
+    <div>
       <form onSubmit={formik.handleSubmit}>
         <TextField
           fullWidth
