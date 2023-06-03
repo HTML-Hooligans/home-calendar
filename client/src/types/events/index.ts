@@ -9,3 +9,5 @@ export interface Event {
 export type GetEventsResponse = Event[];
 
 export type NewEvent = Omit<Event, 'id'>;
+
+export type EventForm = Omit<NewEvent, 'userID'>;

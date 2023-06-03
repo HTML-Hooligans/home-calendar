@@ -6,7 +6,8 @@ import { FC, ReactElement } from 'react';
 interface Props extends ModalProps {
   children: ReactElement;
   open: boolean;
-  title: string | undefined;
+  title: string;
+  onClose: () => void;
 }
 
 const style = {
