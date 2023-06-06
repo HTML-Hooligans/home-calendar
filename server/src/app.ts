@@ -17,8 +17,6 @@ app.use(
   })
 );
 
-app.use(middlewares.decodeToken);
-
 app.use('/v1', api);
 
 app.use(express.static(path.join(__dirname, '..', 'public')));
@@ -26,6 +24,8 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 app.get('/*', (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
+
+app.use(middlewares.decodeToken);
 
 const PORT = process.env.PORT || 3001;
 const server = http.createServer(app);
