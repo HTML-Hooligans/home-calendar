@@ -1,9 +1,10 @@
 export const formatDate = (date: string | Date) => {
-  const day = new Date(date).getDate();
-  const month = new Date(date).getMonth();
-  const year = new Date(date).getFullYear();
+  const d = new Date(date);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
 
-  return month + '/' + day + '/' + year;
+  return `${year}-${month}-${day}`;
 };
 
 export const isSameDay = (dDate: string, date: Date) => {

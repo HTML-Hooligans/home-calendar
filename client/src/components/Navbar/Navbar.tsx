@@ -108,7 +108,11 @@ export default function Navbar({ window }: Props) {
               </Box>
             </>
           )}
-          <Modal open={isModalOpen} title={'Are you really want to log out?'}>
+          <Modal
+            open={isModalOpen}
+            title={'Are you really want to log out?'}
+            onClose={() => setIsModalOpen(false)}
+          >
             <Fragment>
               <Button sx={{ mx: 2 }} variant="contained" onClick={handleLogout}>
                 YES
