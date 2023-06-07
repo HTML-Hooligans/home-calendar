@@ -8,14 +8,44 @@ import { useUser } from '../../hooks/useUser';
 import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
 import { showToast } from '../../utils/showToast';
 import Modal from '../../ui/Modal/Modal';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Avatar from '@mui/material/Avatar';
+import { red } from '@mui/material/colors';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import { CardContent, Menu, MenuItem } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 export default function Dashboard(): ReactElement {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [activeEvent, setActiveEvent] = useState<Event | null>(null);
   const [activeDay, setActiveDay] = useState<string>();
   const { userId } = useUser();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenuOpen = (event: any) => {
+    setMenuOpen(true);
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setMenuOpen(false);
+    setAnchorEl(null);
+  };
+
+  const handleDelete = () => {
+    console.log('Delete');
+  };
+
+  const handleEdit = () => {
+    console.log('Edit');
+  };
 
   const modalTitle = activeEvent ? 'Event Preview' : 'Add Event';
 
@@ -49,10 +79,13 @@ export default function Dashboard(): ReactElement {
       // todo: if there is a event, show event preview with options to delete or edit event
       setActiveDay(undefined);
       setActiveEvent(event);
-      setIsModalOpen(true);
+      // setIsModalOpen(true);
+      setIsPreviewOpen(true);
+      console.log(activeEvent);
     } else {
       setActiveEvent(null);
       setActiveDay(formatDate(day));
+      setIsPreviewOpen(false);
       setIsModalOpen(true);
     }
   };
@@ -94,6 +127,41 @@ export default function Dashboard(): ReactElement {
           day={activeDay}
         />
       </Modal>
+      {isPreviewOpen ? (
+        <Card sx={{ maxWidth: 345 }}>
+          <CardHeader
+            avatar={<Avatar sx={{ backgroundColor: red[500] }} aria-label="recipe" />}
+            action={
+              <Box>
+                <IconButton aria-label="settings" onClick={handleMenuOpen}>
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={menuOpen}
+                  onClose={handleMenuClose}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                >
+                  <MenuItem onClick={handleDelete}>Delete</MenuItem>
+                  <MenuItem onClick={handleEdit}>Edit</MenuItem>
+                </Menu>
+              </Box>
+            }
+            title={activeEvent?.eventName}
+            subheader={activeEvent?.eventDate}
+          />
+          <CardContent>
+            <Typography variant="body2">{activeEvent?.description}</Typography>
+          </CardContent>
+        </Card>
+      ) : null}
     </div>
   );
 }
