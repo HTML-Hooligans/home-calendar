@@ -31,6 +31,33 @@ class EventsApi {
       throw new Error('Failed to add new event');
     }
   }
+
+  async deleteEvent(eventId: number): Promise<void> {
+    try {
+      await axios.delete<void>(`http://localhost:3001/v1/events/${eventId}`, {
+        headers: {
+          Authorization: 'Bearer ' + this.token,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error('Failed to delete event');
+    }
+  }
+
+  async updateEvent(eventId: number, eventData: Partial<NewEvent>): Promise<Event> {
+    try {
+      const response = await axios.put(`http://localhost:3001/v1/events/${eventId}`, eventData, {
+        headers: {
+          Authorization: 'Bearer ' + this.token,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Failed to update event');
+    }
+  }
 }
 
 export default new EventsApi();
