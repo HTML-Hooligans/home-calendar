@@ -49,7 +49,6 @@ export default function Dashboard(): ReactElement {
       // todo: if there is a event, show event preview with options to delete or edit event
       setActiveDay(undefined);
       setActiveEvent(event);
-      // setIsModalOpen(true);
       console.log(activeEvent);
     } else {
       setActiveEvent(null);
