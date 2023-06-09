@@ -1,4 +1,5 @@
 import React, { FC, Fragment, useState } from 'react';
+import { isAfter, isToday, parseISO } from 'date-fns';
 import AddEventForm from '../forms/AddEventForm';
 import Modal from '../../ui/Modal/Modal';
 import { Event, EventForm } from '../../types/events';
@@ -13,6 +14,7 @@ import { CardContent } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { red } from '@mui/material/colors';
+import Button from '@mui/material/Button';
 
 interface Props {
   activeEvent: Event;
@@ -24,7 +26,11 @@ interface Props {
 const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents, events }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const modalTitle = 'Edit';
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const modalTitle = isEditing ? 'Edit' : 'Are you sure to delete event?';
+  const isEventDateAfterToday =
+    isAfter(parseISO(activeEvent.eventDate), new Date()) ||
+    isToday(parseISO(activeEvent.eventDate));
 
   const handleEdit = () => {
     setIsModalOpen(true);
@@ -47,6 +53,7 @@ const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents,
       } finally {
         setIsLoading(false);
         setIsModalOpen(false);
+        setIsEditing(false);
       }
     }
   };
@@ -70,31 +77,69 @@ const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents,
         <CardHeader
           action={
             <Box>
-              <IconButton aria-label="edit" onClick={handleEdit}>
-                <EditIcon sx={{ color: '#1976d2' }} />
-              </IconButton>
+              {isEventDateAfterToday && (
+                <IconButton
+                  aria-label="edit"
+                  onClick={() => {
+                    setIsEditing(true);
+                    handleEdit();
+                  }}
+                >
+                  <EditIcon sx={{ color: '#1976d2' }} />
+                </IconButton>
+              )}
               <IconButton
                 aria-label="delete"
-                onClick={() => activeEvent && handleDeleteEvent(activeEvent.id)}
+                onClick={() => {
+                  setIsModalOpen(true);
+                }}
               >
                 <DeleteIcon sx={{ color: red[500] }} />
               </IconButton>
             </Box>
           }
-          title={activeEvent?.eventName}
-          subheader={activeEvent?.eventDate}
+          title={activeEvent.eventName}
+          subheader={activeEvent.eventDate}
         />
-        <CardContent style={{ display: activeEvent?.description ? 'block' : 'none' }}>
-          <Typography variant="body2">{activeEvent?.description}</Typography>
+        <CardContent style={{ display: activeEvent.description ? 'block' : 'none' }}>
+          <Typography variant="body2">{activeEvent.description}</Typography>
         </CardContent>
       </Card>
-      <Modal open={isModalOpen} title={modalTitle} onClose={() => setIsModalOpen(false)}>
-        <AddEventForm
-          onSuccess={(values) => handleUpdateEvent(activeEvent?.id || 0, values)}
-          submitText="Update"
-          isLoading={isLoading}
-          initialValues={activeEvent}
-        />
+      <Modal
+        open={isModalOpen}
+        title={modalTitle}
+        onClose={() => {
+          setIsModalOpen(false);
+          setIsEditing(false);
+        }}
+      >
+        {isEditing ? (
+          <AddEventForm
+            onSuccess={(values) => handleUpdateEvent(activeEvent.id || 0, values)}
+            submitText="Update"
+            isLoading={isLoading}
+            initialValues={activeEvent}
+          />
+        ) : (
+          <Fragment>
+            <Button
+              sx={{ mx: 2 }}
+              variant="contained"
+              onClick={() => activeEvent && handleDeleteEvent(activeEvent.id)}
+            >
+              YES
+            </Button>
+            <Button
+              sx={{ mx: 2 }}
+              variant="contained"
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+            >
+              NO
+            </Button>
+          </Fragment>
+        )}
       </Modal>
     </Fragment>
   );
