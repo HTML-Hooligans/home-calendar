@@ -9,6 +9,7 @@ import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
 import { showToast } from '../../utils/showToast';
 import Modal from '../../ui/Modal/Modal';
 import EventPreview from '../../components/EventPreview/EventPreview';
+import Box from '@mui/material/Box';
 
 export default function Dashboard(): ReactElement {
   const [events, setEvents] = useState<Event[]>([]);
@@ -95,12 +96,14 @@ export default function Dashboard(): ReactElement {
         />
       </Modal>
       {activeEvent && (
-        <EventPreview
-          activeEvent={activeEvent}
-          updateActiveEvent={setActiveEvent}
-          updateEvents={setEvents}
-          events={events}
-        />
+        <Box style={{ marginTop: '50px', display: 'flex', justifyContent: 'center' }}>
+          <EventPreview
+            activeEvent={activeEvent}
+            updateActiveEvent={setActiveEvent}
+            updateEvents={setEvents}
+            events={events}
+          />
+        </Box>
       )}
     </div>
   );

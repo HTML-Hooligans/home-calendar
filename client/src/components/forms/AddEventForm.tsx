@@ -53,7 +53,6 @@ const AddEventForm = ({ onSuccess, initialValues, submitText, isLoading, day }: 
           onChange={formik.handleChange}
           error={formik.touched.eventName && Boolean(formik.errors.eventName)}
           helperText={formik.touched.eventName && formik.errors.eventName}
-          disabled={initialValues?.eventName !== undefined}
         />
         <TextField
           fullWidth
@@ -64,7 +63,6 @@ const AddEventForm = ({ onSuccess, initialValues, submitText, isLoading, day }: 
           onChange={formik.handleChange}
           error={formik.touched.description && Boolean(formik.errors.description)}
           helperText={formik.touched.description && formik.errors.description}
-          disabled={initialValues?.description !== undefined}
         />
         <TextField
           fullWidth
@@ -82,7 +80,7 @@ const AddEventForm = ({ onSuccess, initialValues, submitText, isLoading, day }: 
           disabled={initialValues?.eventDate !== undefined}
         />
 
-        <Button fullWidth type="submit" loading={isLoading} disabled={!!initialValues}>
+        <Button fullWidth type="submit" loading={isLoading} disabled={isLoading}>
           {submitText}
         </Button>
       </form>

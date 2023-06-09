@@ -1,17 +1,18 @@
-import React, { FC, useState } from 'react';
-import { Event } from '../../types/events';
-import EditEventForm from '../forms/EditEventForm';
+import React, { FC, Fragment, useState } from 'react';
+import Modal from '../../ui/Modal/Modal';
+import { Event, EventForm } from '../../types/events';
 import { showToast } from '../../utils/showToast';
 import eventsApi from '../../api/eventsApi';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
-import { CardContent, Menu, MenuItem } from '@mui/material';
+import { CardContent } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Cancel';
+import AddEventForm from '../forms/AddEventForm';
+import { red } from '@mui/material/colors';
 
 interface Props {
   activeEvent: Event;
@@ -21,48 +22,35 @@ interface Props {
 }
 
 const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents, events }) => {
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-  const [previewCardMenuOpen, setPreviewCardMenuOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedEvent, setEditedEvent] = useState<Partial<Event>>({});
-
-  const handlePreviewMenuToggle = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    setPreviewCardMenuOpen((prevState) => !prevState);
-    if (previewCardMenuOpen) {
-      setAnchorEl(null);
-    } else {
-      setAnchorEl(event.currentTarget);
-    }
-  };
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const modalTitle = 'Edit';
 
   const handleEdit = () => {
-    setIsEditing(true);
-    setEditedEvent(activeEvent);
-    setPreviewCardMenuOpen((prevState) => !prevState);
-    setAnchorEl(null);
+    setIsModalOpen(true);
   };
 
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-    setEditedEvent({});
-  };
-
-  const handleUpdateEvent = async () => {
+  const handleUpdateEvent = async (eventId: number, updatedData: EventForm) => {
     if (activeEvent) {
       try {
-        await eventsApi.updateEvent(activeEvent.id, editedEvent);
-        setIsEditing(false);
-        const updateCurrentEditedEvent = { ...activeEvent, ...editedEvent };
+        setIsLoading(true);
+        const updateCurrentEditedEvent = { ...activeEvent, ...updatedData };
         updateActiveEvent(updateCurrentEditedEvent);
+        const [updatedEvent] = await Promise.all([eventsApi.updateEvent(eventId, updatedData)]);
         const updatedEvents = events.map((event) =>
-          event.id === activeEvent.id ? updateCurrentEditedEvent : event
+          event.id === eventId ? { ...event, ...updatedEvent } : event
         );
         updateEvents(updatedEvents);
-      } catch (error) {
-        console.error(error);
+        showToast('success', 'Event updated successfully');
+      } catch (e) {
+        showToast('error', 'Failed to update event');
+      } finally {
+        setIsLoading(false);
+        setIsModalOpen(false);
       }
     }
   };
+
   const handleDeleteEvent = async (eventId: number) => {
     if (activeEvent) {
       try {
@@ -77,61 +65,38 @@ const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents,
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardHeader
-        action={
-          <Box>
-            <IconButton aria-label="settings" onClick={handlePreviewMenuToggle}>
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={previewCardMenuOpen}
-              onClose={handlePreviewMenuToggle}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-            >
-              <MenuItem onClick={() => activeEvent && handleDeleteEvent(activeEvent.id)}>
-                Delete
-              </MenuItem>
-              <MenuItem onClick={handleEdit}>Edit</MenuItem>
-            </Menu>
-          </Box>
-        }
-        title={
-          isEditing ? (
-            <EditEventForm
-              eventData={editedEvent}
-              setEventData={setEditedEvent}
-              eventDate={activeEvent.eventDate}
-            />
-          ) : (
-            activeEvent.eventName
-          )
-        }
-        subheader={isEditing ? null : activeEvent.eventDate}
-      />
-      <CardContent>
-        {isEditing ? (
-          <Box>
-            <IconButton onClick={handleUpdateEvent}>
-              <SaveIcon />
-            </IconButton>
-            <IconButton onClick={handleCancelEdit}>
-              <CancelIcon />
-            </IconButton>
-          </Box>
-        ) : (
-          activeEvent && <Typography variant="body2">{activeEvent.description}</Typography>
-        )}
-      </CardContent>
-    </Card>
+    <Fragment>
+      <Card sx={{ maxWidth: 345, width: 1 }}>
+        <CardHeader
+          action={
+            <Box>
+              <IconButton aria-label="edit" onClick={handleEdit}>
+                <EditIcon sx={{ color: '#1976d2' }} />
+              </IconButton>
+              <IconButton
+                aria-label="delete"
+                onClick={() => activeEvent && handleDeleteEvent(activeEvent.id)}
+              >
+                <DeleteIcon sx={{ color: red[500] }} />
+              </IconButton>
+            </Box>
+          }
+          title={activeEvent?.eventName}
+          subheader={activeEvent?.eventDate}
+        />
+        <CardContent style={{ display: activeEvent?.description ? 'block' : 'none' }}>
+          <Typography variant="body2">{activeEvent?.description}</Typography>
+        </CardContent>
+      </Card>
+      <Modal open={isModalOpen} title={modalTitle} onClose={() => setIsModalOpen(false)}>
+        <AddEventForm
+          onSuccess={(values) => handleUpdateEvent(activeEvent?.id || 0, values)}
+          submitText="Update"
+          isLoading={isLoading}
+          initialValues={activeEvent}
+        />
+      </Modal>
+    </Fragment>
   );
 };
 
