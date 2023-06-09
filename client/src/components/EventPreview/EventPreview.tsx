@@ -1,4 +1,5 @@
 import React, { FC, Fragment, useState } from 'react';
+import AddEventForm from '../forms/AddEventForm';
 import Modal from '../../ui/Modal/Modal';
 import { Event, EventForm } from '../../types/events';
 import { showToast } from '../../utils/showToast';
@@ -11,7 +12,6 @@ import IconButton from '@mui/material/IconButton';
 import { CardContent } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import AddEventForm from '../forms/AddEventForm';
 import { red } from '@mui/material/colors';
 
 interface Props {

@@ -1,5 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
+import Modal from '../../ui/Modal/Modal';
+import EventPreview from '../../components/EventPreview/EventPreview';
 import { formatDate, isSameDay } from '../../utils/calendarUtils';
 import eventsApi from '../../api/eventsApi';
 import { Event, EventForm } from '../../types/events';
@@ -7,8 +9,6 @@ import AddEventForm from '../../components/forms/AddEventForm';
 import { useUser } from '../../hooks/useUser';
 import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
 import { showToast } from '../../utils/showToast';
-import Modal from '../../ui/Modal/Modal';
-import EventPreview from '../../components/EventPreview/EventPreview';
 import Box from '@mui/material/Box';
 
 export default function Dashboard(): ReactElement {
