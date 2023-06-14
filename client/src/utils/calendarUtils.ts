@@ -13,3 +13,9 @@ export const isSameDay = (dDate: string, date: Date) => {
 
   return eventDate === calendarDate;
 };
+
+export const isBeforeToday = (date: Date) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return date >= today;
+};

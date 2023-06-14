@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState } from 'react';
-import { isAfter, isToday, parseISO } from 'date-fns';
+import { formatDate, isSameDay } from '../../utils/calendarUtils';
 import AddEventForm from '../forms/AddEventForm';
 import Modal from '../../ui/Modal/Modal';
 import { Event, EventForm } from '../../types/events';
@@ -13,48 +13,45 @@ import IconButton from '@mui/material/IconButton';
 import { CardContent } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { red } from '@mui/material/colors';
+import { red, blue } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 
 interface Props {
   activeEvent: Event;
-  updateActiveEvent: React.Dispatch<React.SetStateAction<Event | null>>;
+  setActiveEvent: React.Dispatch<React.SetStateAction<Event | null>>;
   events: Event[];
-  updateEvents: (updatedEvents: Event[]) => void;
+  setEvents: (updatedEvents: Event[]) => void;
 }
 
-const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents, events }) => {
+const EventPreview: FC<Props> = ({ activeEvent, setActiveEvent, setEvents, events }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const modalTitle = isEditing ? 'Edit' : 'Are you sure to delete event?';
   const isEventDateAfterToday =
-    isAfter(parseISO(activeEvent.eventDate), new Date()) ||
-    isToday(parseISO(activeEvent.eventDate));
+    isSameDay(activeEvent.eventDate, new Date()) || new Date(activeEvent.eventDate) > new Date();
 
   const handleEdit = () => {
     setIsModalOpen(true);
   };
 
   const handleUpdateEvent = async (eventId: number, updatedData: EventForm) => {
-    if (activeEvent) {
-      try {
-        setIsLoading(true);
-        const updateCurrentEditedEvent = { ...activeEvent, ...updatedData };
-        updateActiveEvent(updateCurrentEditedEvent);
-        const [updatedEvent] = await Promise.all([eventsApi.updateEvent(eventId, updatedData)]);
-        const updatedEvents = events.map((event) =>
-          event.id === eventId ? { ...event, ...updatedEvent } : event
-        );
-        updateEvents(updatedEvents);
-        showToast('success', 'Event updated successfully');
-      } catch (e) {
-        showToast('error', 'Failed to update event');
-      } finally {
-        setIsLoading(false);
-        setIsModalOpen(false);
-        setIsEditing(false);
-      }
+    try {
+      setIsLoading(true);
+      const updateCurrentEditedEvent = { ...activeEvent, ...updatedData };
+      const updatedEvent = await eventsApi.updateEvent(updateCurrentEditedEvent);
+      setActiveEvent(updateCurrentEditedEvent);
+      const updatedEvents = events.map((event) =>
+        event.id === eventId ? { ...event, ...updatedEvent } : event
+      );
+      setEvents(updatedEvents);
+      showToast('success', 'Event updated successfully');
+    } catch (e) {
+      showToast('error', 'Failed to update event');
+    } finally {
+      setIsLoading(false);
+      setIsModalOpen(false);
+      setIsEditing(false);
     }
   };
 
@@ -62,9 +59,9 @@ const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents,
     if (activeEvent) {
       try {
         await eventsApi.deleteEvent(eventId);
-        updateEvents(events.filter((event) => event.id !== eventId));
+        setEvents(events.filter((event) => event.id !== eventId));
         showToast('success', 'Event deleted successfully');
-        updateActiveEvent(null);
+        setActiveEvent(null);
       } catch (e) {
         showToast('error', 'Failed to delete event');
       }
@@ -85,7 +82,7 @@ const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents,
                     handleEdit();
                   }}
                 >
-                  <EditIcon sx={{ color: '#1976d2' }} />
+                  <EditIcon sx={{ color: blue[700] }} />
                 </IconButton>
               )}
               <IconButton
@@ -99,7 +96,7 @@ const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents,
             </Box>
           }
           title={activeEvent.eventName}
-          subheader={activeEvent.eventDate}
+          subheader={formatDate(activeEvent.eventDate)}
         />
         <CardContent style={{ display: activeEvent.description ? 'block' : 'none' }}>
           <Typography variant="body2">{activeEvent.description}</Typography>
@@ -115,7 +112,7 @@ const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents,
       >
         {isEditing ? (
           <AddEventForm
-            onSuccess={(values) => handleUpdateEvent(activeEvent.id || 0, values)}
+            onSuccess={(values) => handleUpdateEvent(activeEvent.id, values)}
             submitText="Update"
             isLoading={isLoading}
             initialValues={activeEvent}
@@ -125,7 +122,7 @@ const EventPreview: FC<Props> = ({ activeEvent, updateActiveEvent, updateEvents,
             <Button
               sx={{ mx: 2 }}
               variant="contained"
-              onClick={() => activeEvent && handleDeleteEvent(activeEvent.id)}
+              onClick={() => handleDeleteEvent(activeEvent.id)}
             >
               YES
             </Button>

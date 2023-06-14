@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import Modal from '../../ui/Modal/Modal';
 import EventPreview from '../../components/EventPreview/EventPreview';
-import { formatDate, isSameDay } from '../../utils/calendarUtils';
+import { formatDate, isBeforeToday, isSameDay } from '../../utils/calendarUtils';
 import eventsApi from '../../api/eventsApi';
 import { Event, EventForm } from '../../types/events';
 import AddEventForm from '../../components/forms/AddEventForm';
@@ -50,11 +50,11 @@ export default function Dashboard(): ReactElement {
       // todo: if there is a event, show event preview with options to delete or edit event
       setActiveDay(undefined);
       setActiveEvent(event);
-      console.log(activeEvent);
     } else {
+      const isDayAfterToday = isBeforeToday(day);
       setActiveEvent(null);
       setActiveDay(formatDate(day));
-      setIsModalOpen(true);
+      setIsModalOpen(isDayAfterToday);
     }
   };
 
@@ -99,8 +99,8 @@ export default function Dashboard(): ReactElement {
         <Box style={{ marginTop: '50px', display: 'flex', justifyContent: 'center' }}>
           <EventPreview
             activeEvent={activeEvent}
-            updateActiveEvent={setActiveEvent}
-            updateEvents={setEvents}
+            setActiveEvent={setActiveEvent}
+            setEvents={setEvents}
             events={events}
           />
         </Box>

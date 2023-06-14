@@ -77,7 +77,7 @@ const AddEventForm = ({ onSuccess, initialValues, submitText, isLoading, day }: 
           onChange={formik.handleChange}
           error={formik.touched.eventDate && Boolean(formik.errors.eventDate)}
           helperText={formik.touched.eventDate && formik.errors.eventDate}
-          disabled={initialValues?.eventDate !== undefined}
+          disabled
         />
 
         <Button fullWidth type="submit" loading={isLoading} disabled={isLoading}>

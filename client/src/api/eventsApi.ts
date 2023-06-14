@@ -1,6 +1,6 @@
 import { getToken } from '../utils/getToken';
 import axios from 'axios';
-import { GetEventsResponse, NewEvent } from '../types/events';
+import { GetEventsResponse, NewEvent, Event } from '../types/events';
 
 class EventsApi {
   token = getToken();
@@ -32,9 +32,9 @@ class EventsApi {
     }
   }
 
-  async deleteEvent(eventId: number): Promise<void> {
+  async deleteEvent(eventId: number) {
     try {
-      await axios.delete<void>(`http://localhost:3001/v1/events/${eventId}`, {
+      await axios.delete(`http://localhost:3001/v1/events/${eventId}`, {
         headers: {
           Authorization: 'Bearer ' + this.token,
         },
@@ -45,9 +45,12 @@ class EventsApi {
     }
   }
 
-  async updateEvent(eventId: number, eventData: Partial<NewEvent>): Promise<Event> {
+  async updateEvent(updateCurrentEditedEvent: Event) {
     try {
-      const response = await axios.put(`http://localhost:3001/v1/events/${eventId}`, eventData, {
+      const { id, eventName, description } = updateCurrentEditedEvent;
+      const updatedData = { eventName, description };
+
+      const response = await axios.put(`http://localhost:3001/v1/events/${id}`, updatedData, {
         headers: {
           Authorization: 'Bearer ' + this.token,
         },
