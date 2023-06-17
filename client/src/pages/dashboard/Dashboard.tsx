@@ -2,10 +2,10 @@ import React, { ReactElement, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import Modal from '../../ui/Modal/Modal';
 import EventPreview from '../../components/EventPreview/EventPreview';
-import { formatDate, isBeforeToday, isSameDay } from '../../utils/calendarUtils';
+import { formatDate, isDateInFuture, isSameDay } from '../../utils/calendarUtils';
 import eventsApi from '../../api/eventsApi';
-import { Event, EventForm } from '../../types/events';
-import AddEventForm from '../../components/forms/AddEventForm';
+import { Event, EventFormData } from '../../types/events';
+import EventForm from '../../components/forms/EventForm';
 import { useUser } from '../../hooks/useUser';
 import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
 import { showToast } from '../../utils/showToast';
@@ -51,14 +51,14 @@ export default function Dashboard(): ReactElement {
       setActiveDay(undefined);
       setActiveEvent(event);
     } else {
-      const isDayAfterToday = isBeforeToday(day);
+      const isDayAfterToday = isDateInFuture(day);
       setActiveEvent(null);
       setActiveDay(formatDate(day));
       setIsModalOpen(isDayAfterToday);
     }
   };
 
-  const handleAddEvent = async (values: EventForm) => {
+  const handleAddEvent = async (values: EventFormData) => {
     if (activeEvent) return;
 
     try {
@@ -87,7 +87,7 @@ export default function Dashboard(): ReactElement {
       />
 
       <Modal open={isModalOpen} title={modalTitle} onClose={() => setIsModalOpen(false)}>
-        <AddEventForm
+        <EventForm
           onSuccess={handleAddEvent}
           submitText="Submit"
           isLoading={isLoading}

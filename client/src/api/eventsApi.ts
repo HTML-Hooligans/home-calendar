@@ -45,16 +45,23 @@ class EventsApi {
     }
   }
 
-  async updateEvent(updateCurrentEditedEvent: Event) {
+  async updateEvent(updatedEvent: Event) {
     try {
-      const { id, eventName, description } = updateCurrentEditedEvent;
-      const updatedData = { eventName, description };
+      const { id, eventName, description } = updatedEvent;
 
-      const response = await axios.put(`http://localhost:3001/v1/events/${id}`, updatedData, {
-        headers: {
-          Authorization: 'Bearer ' + this.token,
+      const response = await axios.put(
+        `http://localhost:3001/v1/events/${id}`,
+        {
+          eventName,
+          description,
         },
-      });
+        {
+          headers: {
+            Authorization: 'Bearer ' + this.token,
+          },
+        }
+      );
+
       return response.data;
     } catch (error) {
       console.error(error);

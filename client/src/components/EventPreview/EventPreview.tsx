@@ -1,8 +1,8 @@
-import React, { FC, Fragment, useState } from 'react';
+import React, { Dispatch, FC, Fragment, SetStateAction, useState } from 'react';
 import { formatDate, isSameDay } from '../../utils/calendarUtils';
-import AddEventForm from '../forms/AddEventForm';
+import EventForm from '../forms/EventForm';
 import Modal from '../../ui/Modal/Modal';
-import { Event, EventForm } from '../../types/events';
+import { Event, EventFormData } from '../../types/events';
 import { showToast } from '../../utils/showToast';
 import eventsApi from '../../api/eventsApi';
 import Card from '@mui/material/Card';
@@ -18,15 +18,15 @@ import Button from '@mui/material/Button';
 
 interface Props {
   activeEvent: Event;
-  setActiveEvent: React.Dispatch<React.SetStateAction<Event | null>>;
+  setActiveEvent: Dispatch<SetStateAction<Event | null>>;
   events: Event[];
-  setEvents: (updatedEvents: Event[]) => void;
+  setEvents: (events: Event[]) => void;
 }
 
 const EventPreview: FC<Props> = ({ activeEvent, setActiveEvent, setEvents, events }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const modalTitle = isEditing ? 'Edit' : 'Are you sure to delete event?';
   const isEventDateAfterToday =
     isSameDay(activeEvent.eventDate, new Date()) || new Date(activeEvent.eventDate) > new Date();
@@ -35,14 +35,14 @@ const EventPreview: FC<Props> = ({ activeEvent, setActiveEvent, setEvents, event
     setIsModalOpen(true);
   };
 
-  const handleUpdateEvent = async (eventId: number, updatedData: EventForm) => {
+  const handleUpdateEvent = async (activeEventId: number, updatedData: EventFormData) => {
     try {
       setIsLoading(true);
-      const updateCurrentEditedEvent = { ...activeEvent, ...updatedData };
-      const updatedEvent = await eventsApi.updateEvent(updateCurrentEditedEvent);
-      setActiveEvent(updateCurrentEditedEvent);
+      const updatedEventData = { ...activeEvent, ...updatedData };
+      const updatedEvent = await eventsApi.updateEvent(updatedEventData);
+      setActiveEvent(updatedEventData);
       const updatedEvents = events.map((event) =>
-        event.id === eventId ? { ...event, ...updatedEvent } : event
+        event.id === activeEventId ? { ...event, ...updatedEvent } : event
       );
       setEvents(updatedEvents);
       showToast('success', 'Event updated successfully');
@@ -56,15 +56,13 @@ const EventPreview: FC<Props> = ({ activeEvent, setActiveEvent, setEvents, event
   };
 
   const handleDeleteEvent = async (eventId: number) => {
-    if (activeEvent) {
-      try {
-        await eventsApi.deleteEvent(eventId);
-        setEvents(events.filter((event) => event.id !== eventId));
-        showToast('success', 'Event deleted successfully');
-        setActiveEvent(null);
-      } catch (e) {
-        showToast('error', 'Failed to delete event');
-      }
+    try {
+      await eventsApi.deleteEvent(eventId);
+      setEvents(events.filter((event) => event.id !== eventId));
+      showToast('success', 'Event deleted successfully');
+      setActiveEvent(null);
+    } catch (e) {
+      showToast('error', 'Failed to delete event');
     }
   };
 
@@ -111,7 +109,7 @@ const EventPreview: FC<Props> = ({ activeEvent, setActiveEvent, setEvents, event
         }}
       >
         {isEditing ? (
-          <AddEventForm
+          <EventForm
             onSuccess={(values) => handleUpdateEvent(activeEvent.id, values)}
             submitText="Update"
             isLoading={isLoading}
