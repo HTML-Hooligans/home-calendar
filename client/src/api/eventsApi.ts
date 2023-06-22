@@ -47,20 +47,13 @@ class EventsApi {
 
   async updateEvent(updatedEvent: Event) {
     try {
-      const { id, eventName, description } = updatedEvent;
+      const { id } = updatedEvent;
 
-      const response = await axios.put(
-        `http://localhost:3001/v1/events/${id}`,
-        {
-          eventName,
-          description,
+      const response = await axios.put(`http://localhost:3001/v1/events/${id}`, updatedEvent, {
+        headers: {
+          Authorization: 'Bearer ' + this.token,
         },
-        {
-          headers: {
-            Authorization: 'Bearer ' + this.token,
-          },
-        }
-      );
+      });
 
       return response.data;
     } catch (error) {
