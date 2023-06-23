@@ -2,17 +2,25 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import TextField from '@mui/material/TextField';
 import Button from '../../ui/Button/Button';
-import { EventForm } from '../../types/events';
+import { EventFormData } from '../../types/events';
 
 interface Props {
-  onSuccess: (values: EventForm) => void;
-  initialValues?: EventForm;
+  onSuccess: (values: EventFormData) => void;
+  initialValues?: EventFormData;
   submitText: string;
   isLoading?: boolean;
   day?: string;
+  isDateEditable?: boolean;
 }
 
-const AddEventForm = ({ onSuccess, initialValues, submitText, isLoading, day }: Props) => {
+const EventForm = ({
+  onSuccess,
+  initialValues,
+  submitText,
+  isLoading,
+  day,
+  isDateEditable,
+}: Props) => {
   const maxDate = new Date();
   maxDate.setFullYear(maxDate.getFullYear() + 1);
   const minDate = new Date();
@@ -53,7 +61,6 @@ const AddEventForm = ({ onSuccess, initialValues, submitText, isLoading, day }: 
           onChange={formik.handleChange}
           error={formik.touched.eventName && Boolean(formik.errors.eventName)}
           helperText={formik.touched.eventName && formik.errors.eventName}
-          disabled={initialValues?.eventName !== undefined}
         />
         <TextField
           fullWidth
@@ -64,7 +71,6 @@ const AddEventForm = ({ onSuccess, initialValues, submitText, isLoading, day }: 
           onChange={formik.handleChange}
           error={formik.touched.description && Boolean(formik.errors.description)}
           helperText={formik.touched.description && formik.errors.description}
-          disabled={initialValues?.description !== undefined}
         />
         <TextField
           fullWidth
@@ -79,10 +85,10 @@ const AddEventForm = ({ onSuccess, initialValues, submitText, isLoading, day }: 
           onChange={formik.handleChange}
           error={formik.touched.eventDate && Boolean(formik.errors.eventDate)}
           helperText={formik.touched.eventDate && formik.errors.eventDate}
-          disabled={initialValues?.eventDate !== undefined}
+          disabled={!isDateEditable}
         />
 
-        <Button fullWidth type="submit" loading={isLoading} disabled={!!initialValues}>
+        <Button fullWidth type="submit" loading={isLoading} disabled={isLoading}>
           {submitText}
         </Button>
       </form>
@@ -90,4 +96,4 @@ const AddEventForm = ({ onSuccess, initialValues, submitText, isLoading, day }: 
   );
 };
 
-export default AddEventForm;
+export default EventForm;

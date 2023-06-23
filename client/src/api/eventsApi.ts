@@ -1,6 +1,6 @@
 import { getToken } from '../utils/getToken';
 import axios from 'axios';
-import { GetEventsResponse, NewEvent } from '../types/events';
+import { GetEventsResponse, NewEvent, Event } from '../types/events';
 
 class EventsApi {
   token = getToken();
@@ -29,6 +29,36 @@ class EventsApi {
     } catch (error) {
       console.error(error);
       throw new Error('Failed to add new event');
+    }
+  }
+
+  async deleteEvent(eventId: number) {
+    try {
+      await axios.delete(`http://localhost:3001/v1/events/${eventId}`, {
+        headers: {
+          Authorization: 'Bearer ' + this.token,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error('Failed to delete event');
+    }
+  }
+
+  async updateEvent(updatedEvent: Event) {
+    try {
+      const { id } = updatedEvent;
+
+      const response = await axios.put(`http://localhost:3001/v1/events/${id}`, updatedEvent, {
+        headers: {
+          Authorization: 'Bearer ' + this.token,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Failed to update event');
     }
   }
 }

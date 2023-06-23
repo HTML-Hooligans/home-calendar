@@ -36,7 +36,7 @@ export const httpAddNewEvent = async (req: Request, res: Response) => {
 
 export const httpUpdateEvent = async (req: Request, res: Response) => {
   try {
-    const { eventName, eventDate, description } = req.body;
+    const { eventName, description } = req.body;
     const { id } = req.params;
 
     const event = await Event.findByPk(id);
@@ -47,7 +47,6 @@ export const httpUpdateEvent = async (req: Request, res: Response) => {
     }
 
     event.eventName = eventName;
-    event.eventDate = eventDate;
     event.description = description;
 
     await event.save();

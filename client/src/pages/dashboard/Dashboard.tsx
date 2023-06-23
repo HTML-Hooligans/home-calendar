@@ -1,13 +1,15 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
-import { formatDate, isSameDay } from '../../utils/calendarUtils';
+import Modal from '../../ui/Modal/Modal';
+import EventPreview from '../../components/EventPreview/EventPreview';
+import { formatDate, isDateInFuture, isSameDay } from '../../utils/calendarUtils';
 import eventsApi from '../../api/eventsApi';
-import { Event, EventForm } from '../../types/events';
-import AddEventForm from '../../components/forms/AddEventForm';
+import { Event, EventFormData } from '../../types/events';
+import EventForm from '../../components/forms/EventForm';
 import { useUser } from '../../hooks/useUser';
 import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
 import { showToast } from '../../utils/showToast';
-import Modal from '../../ui/Modal/Modal';
+import Box from '@mui/material/Box';
 
 export default function Dashboard(): ReactElement {
   const [events, setEvents] = useState<Event[]>([]);
@@ -16,7 +18,6 @@ export default function Dashboard(): ReactElement {
   const [activeEvent, setActiveEvent] = useState<Event | null>(null);
   const [activeDay, setActiveDay] = useState<string>();
   const { userId } = useUser();
-
   const modalTitle = activeEvent ? 'Event Preview' : 'Add Event';
 
   useEffect(() => {
@@ -49,15 +50,15 @@ export default function Dashboard(): ReactElement {
       // todo: if there is a event, show event preview with options to delete or edit event
       setActiveDay(undefined);
       setActiveEvent(event);
-      setIsModalOpen(true);
     } else {
+      const isDayAfterToday = isDateInFuture(day);
       setActiveEvent(null);
       setActiveDay(formatDate(day));
-      setIsModalOpen(true);
+      setIsModalOpen(isDayAfterToday);
     }
   };
 
-  const handleAddEvent = async (values: EventForm) => {
+  const handleAddEvent = async (values: EventFormData) => {
     if (activeEvent) return;
 
     try {
@@ -86,7 +87,7 @@ export default function Dashboard(): ReactElement {
       />
 
       <Modal open={isModalOpen} title={modalTitle} onClose={() => setIsModalOpen(false)}>
-        <AddEventForm
+        <EventForm
           onSuccess={handleAddEvent}
           submitText="Submit"
           isLoading={isLoading}
@@ -94,6 +95,16 @@ export default function Dashboard(): ReactElement {
           day={activeDay}
         />
       </Modal>
+      {activeEvent && (
+        <Box style={{ marginTop: '50px', display: 'flex', justifyContent: 'center' }}>
+          <EventPreview
+            activeEvent={activeEvent}
+            setActiveEvent={setActiveEvent}
+            setEvents={setEvents}
+            events={events}
+          />
+        </Box>
+      )}
     </div>
   );
 }
