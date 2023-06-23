@@ -12,7 +12,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Global } from '@emotion/react';
 import { globalCss } from './theme/theme';
 import Dashboard from './pages/dashboard/Dashboard';
-// import 'react-calendar/dist/Calendar.css';
 
 function App() {
   return (

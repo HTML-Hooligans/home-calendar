@@ -10,6 +10,8 @@ import { useUser } from '../../hooks/useUser';
 import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
 import { showToast } from '../../utils/showToast';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import './Calendar.css';
 
 export default function Dashboard(): ReactElement {
   const [events, setEvents] = useState<Event[]>([]);
@@ -35,7 +37,7 @@ export default function Dashboard(): ReactElement {
     if (view === 'month' && events.length > 0) {
       if (events.find((calendarEvent) => isSameDay(calendarEvent.eventDate, date))) {
         // todo add some icon or text?
-        return <p>Event</p>;
+        return <p className="test">Event</p>;
       }
     } else {
       return null;
@@ -78,8 +80,10 @@ export default function Dashboard(): ReactElement {
   };
 
   return (
-    <div>
-      <div>Dashboard</div>
+    <Box>
+      <Typography variant="h4" align="center" style={{ marginTop: '20px' }} gutterBottom>
+        Dashboard
+      </Typography>
 
       <Calendar
         tileContent={mapEventsToCalendarView}
@@ -105,6 +109,6 @@ export default function Dashboard(): ReactElement {
           />
         </Box>
       )}
-    </div>
+    </Box>
   );
 }
