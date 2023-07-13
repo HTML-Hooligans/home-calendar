@@ -11,9 +11,8 @@ import getAuthErrorMessage from '../../utils/getAuthErrorMessage';
 import { showToast } from '../../utils/showToast';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-// import * as styles from './Dashboard.styles';
+import * as styles from './Dashboard.styles';
 import { calendarStyles } from './Dashboard.styles';
-// import './Calendar.css';
 
 export default function Dashboard(): ReactElement {
   const [events, setEvents] = useState<Event[]>([]);
@@ -86,12 +85,13 @@ export default function Dashboard(): ReactElement {
       <Typography variant="h4" align="center" style={{ marginTop: '20px' }} gutterBottom>
         Dashboard
       </Typography>
-
-      <Calendar
-        tileContent={mapEventsToCalendarView}
-        onClickDay={(value) => handleDayClick(value)}
-        css={calendarStyles}
-      />
+      <div css={styles.calendarStyles}>
+        <Calendar
+          tileContent={mapEventsToCalendarView}
+          onClickDay={(value) => handleDayClick(value)}
+          css={calendarStyles}
+        />
+      </div>
 
       <Modal open={isModalOpen} title={modalTitle} onClose={() => setIsModalOpen(false)}>
         <EventForm

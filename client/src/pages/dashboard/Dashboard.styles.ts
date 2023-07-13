@@ -1,5 +1,4 @@
 import { css } from '@emotion/react';
-import { CSSObject } from '@emotion/react';
 
 export const calendarStyles = () => css`
   .react-calendar {
