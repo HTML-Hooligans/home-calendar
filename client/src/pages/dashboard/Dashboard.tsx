@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import Modal from '../../ui/Modal/Modal';
 import EventPreview from '../../components/EventPreview/EventPreview';
-import { formatDate, isDateInFuture, isSameDay } from '../../utils/calendarUtils';
+// import { formatDate, isDateInFuture, isSameDay } from '../../utils/calendarUtils';
 import eventsApi from '../../api/eventsApi';
 import { Event, EventFormData } from '../../types/events';
 import EventForm from '../../components/forms/EventForm';
@@ -18,7 +18,7 @@ export default function Dashboard(): ReactElement {
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeEvent, setActiveEvent] = useState<Event | null>(null);
-  const [activeDay, setActiveDay] = useState<string>();
+  // const [activeDay, setActiveDay] = useState<string>();
   const { userId } = useUser();
   const modalTitle = activeEvent ? 'Event Preview' : 'Add Event';
 
@@ -94,7 +94,7 @@ export default function Dashboard(): ReactElement {
           submitText="Submit"
           isLoading={isLoading}
           initialValues={activeEvent || undefined}
-          day={activeDay}
+          // day={activeDay}
         />
       </Modal>
       {activeEvent && (
