@@ -1,5 +1,4 @@
 import React, { ReactElement, useEffect, useState } from 'react';
-import Calendar from 'react-calendar';
 import Modal from '../../ui/Modal/Modal';
 import EventPreview from '../../components/EventPreview/EventPreview';
 import { formatDate, isDateInFuture, isSameDay } from '../../utils/calendarUtils';
@@ -12,7 +11,7 @@ import { showToast } from '../../utils/showToast';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import * as styles from './Dashboard.styles';
-import { calendarStyles } from './Dashboard.styles';
+import MiniCalendar from '../../components/MiniCalendar/MiniCalendar';
 
 export default function Dashboard(): ReactElement {
   const [events, setEvents] = useState<Event[]>([]);
@@ -34,32 +33,32 @@ export default function Dashboard(): ReactElement {
     }
   }, [userId]);
 
-  const mapEventsToCalendarView = ({ date, view }: { date: Date; view: string }) => {
-    if (view === 'month' && events.length > 0) {
-      if (events.find((calendarEvent) => isSameDay(calendarEvent.eventDate, date))) {
-        // todo add some icon or text?
-        return <p className="test">Event</p>;
-      }
-    } else {
-      return null;
-    }
-  };
+  // const mapEventsToCalendarView = ({ date, view }: { date: Date; view: string }) => {
+  //   if (view === 'month' && events.length > 0) {
+  //     if (events.find((calendarEvent) => isSameDay(calendarEvent.eventDate, date))) {
+  //       // todo add some icon or text?
+  //       // return <p className="test">Event</p>;
+  //     }
+  //   } else {
+  //     return null;
+  //   }
+  // };
 
-  const handleDayClick = (day: Date) => {
-    // todo add logic for returning all events for that day
-    const event = events.find((event) => formatDate(event.eventDate) === formatDate(day));
-
-    if (event) {
-      // todo: if there is a event, show event preview with options to delete or edit event
-      setActiveDay(undefined);
-      setActiveEvent(event);
-    } else {
-      const isDayAfterToday = isDateInFuture(day);
-      setActiveEvent(null);
-      setActiveDay(formatDate(day));
-      setIsModalOpen(isDayAfterToday);
-    }
-  };
+  // const handleDayClick = (day: Date) => {
+  //   // todo add logic for returning all events for that day
+  //   const event = events.find((event) => formatDate(event.eventDate) === formatDate(day));
+  //
+  //   if (event) {
+  //     // todo: if there is a event, show event preview with options to delete or edit event
+  //     setActiveDay(undefined);
+  //     setActiveEvent(event);
+  //   } else {
+  //     const isDayAfterToday = isDateInFuture(day);
+  //     setActiveEvent(null);
+  //     setActiveDay(formatDate(day));
+  //     setIsModalOpen(isDayAfterToday);
+  //   }
+  // };
 
   const handleAddEvent = async (values: EventFormData) => {
     if (activeEvent) return;
@@ -85,12 +84,8 @@ export default function Dashboard(): ReactElement {
       <Typography variant="h4" align="center" style={{ marginTop: '20px' }} gutterBottom>
         Dashboard
       </Typography>
-      <div css={styles.calendarStyles}>
-        <Calendar
-          tileContent={mapEventsToCalendarView}
-          onClickDay={(value) => handleDayClick(value)}
-          css={calendarStyles}
-        />
+      <div css={styles.emotionStyles}>
+        <MiniCalendar />
       </div>
 
       <Modal open={isModalOpen} title={modalTitle} onClose={() => setIsModalOpen(false)}>
