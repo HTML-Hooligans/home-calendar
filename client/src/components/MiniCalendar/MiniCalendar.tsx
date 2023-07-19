@@ -4,7 +4,7 @@ import * as styles from './MiniCalendar.styles';
 
 const MiniCalendar = ({ ...restProps }) => {
   return (
-    <div css={styles.miniCalendarStyles}>
+    <div css={styles.calendarWrapper}>
       <Calendar {...restProps} />
     </div>
   );

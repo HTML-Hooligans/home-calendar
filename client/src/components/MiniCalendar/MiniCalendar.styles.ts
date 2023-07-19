@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 
-export const miniCalendarStyles = () => css`
+export const calendarWrapper = () => css`
   .react-calendar {
     width: 100%;
     max-width: 100%;
@@ -57,6 +57,7 @@ export const miniCalendarStyles = () => css`
 
   .react-calendar__navigation button:disabled {
     background-color: #f0f0f0;
+    cursor: not-allowed;
   }
 
   .react-calendar__navigation button:enabled:hover,
@@ -124,6 +125,7 @@ export const miniCalendarStyles = () => css`
 
   .react-calendar__tile:disabled {
     background-color: #f0f0f0;
+    cursor: not-allowed;
   }
 
   .react-calendar__tile:enabled:hover,

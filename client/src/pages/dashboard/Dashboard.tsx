@@ -84,7 +84,7 @@ export default function Dashboard(): ReactElement {
       <Typography variant="h4" align="center" style={{ marginTop: '20px' }} gutterBottom>
         Dashboard
       </Typography>
-      <div css={styles.emotionStyles}>
+      <div css={styles.container}>
         <MiniCalendar />
       </div>
 
