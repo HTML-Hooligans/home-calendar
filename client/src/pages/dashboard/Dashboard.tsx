@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import * as styles from './Dashboard.styles';
 import MiniCalendar from '../../components/MiniCalendar/MiniCalendar';
+import BigCalendarWrapper from '../../components/BigCalendar/BigCalendar';
 
 export default function Dashboard(): ReactElement {
   const [events, setEvents] = useState<Event[]>([]);
@@ -85,9 +86,13 @@ export default function Dashboard(): ReactElement {
         Dashboard
       </Typography>
       <div css={styles.container}>
-        <MiniCalendar />
+        <div css={styles.miniCalendarContainer}>
+          <MiniCalendar />
+        </div>
+        <div css={styles.bigCalendarContainer}>
+          <BigCalendarWrapper events={events} />
+        </div>
       </div>
-
       <Modal open={isModalOpen} title={modalTitle} onClose={() => setIsModalOpen(false)}>
         <EventForm
           onSuccess={handleAddEvent}
