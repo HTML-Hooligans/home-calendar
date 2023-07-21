@@ -2,17 +2,17 @@ import { css } from '@emotion/react';
 
 export const calendarWrapper = () => css`
   .react-calendar {
-    width: 100%;
+    width: 300px;
     max-width: 100%;
     background: white;
     border: 1px solid #a0a096;
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1em;
-    margin: 5% auto 0;
+    margin: 0;
   }
 
   .react-calendar--doubleView {
-    width: 700px;
+    width: 600px;
   }
 
   .react-calendar--doubleView .react-calendar__viewContainer {
@@ -166,8 +166,5 @@ export const calendarWrapper = () => css`
   }
 
   @media screen and (min-width: 768px) {
-    .react-calendar {
-      width: 60%;
-    }
   }
 `;
